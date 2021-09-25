@@ -7,6 +7,13 @@ namespace App\Presenters;
 use Nette;
 
 
-final class HomepagePresenter extends Nette\Application\UI\Presenter
+class HomepagePresenter extends Nette\Application\UI\Presenter
 {
+    public function __construct(public \App\Services\RestaurantApi $restaurantApi) {
+		parent::__construct();
+    }
+	
+	public function renderDefault() {
+		$this->template->restaurants = $this->restaurantApi->getList();
+	}
 }
