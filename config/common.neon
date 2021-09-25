@@ -19,4 +19,4 @@ di:
 
 services:
 	- App\Router\RouterFactory::createRouter
-	- App\Services\RestaurantApi
+	- App\Services\RestaurantApi(%restaurant.url%)

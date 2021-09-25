@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use Nette;
+use Nette\Http\UrlImmutable; 
 /**
  * Description of RestaurantApi
  *
@@ -11,28 +12,27 @@ use Nette;
  */
 
 
-class RestaurantApi {
-    use Nette\SmartObject;
+class RestaurantApi extends Downloader {
 	
-	private string $urlBase;
+	private UrlImmutable $urlBase;
 
 
-	public function __construct()
+	public function __construct(string $urlBase, \Nette\Caching\Storage $storage)
 	{
-		$this->urlBase = "https://private-anon-d14d2ce8c7-idcrestaurant.apiary-mock.com/";
+		parent::__construct($storage);
+		$this->urlBase = new UrlImmutable($urlBase);
 	}
-
 
 	public function getList()
 	{
-		$url = $this->urlBase."restaurant";
-		$downloaded = file_get_contents($url);
+		$url = $this->urlBase->withPath("restaurant");
+		$downloaded = $this->get($url);
 		return \Nette\Utils\Json::decode($downloaded);
 	}
 	
 	public function getDetail(int $restaurantId) {
-		$url = $this->urlBase."daily-menu?restaurant_id=".$restaurantId;
-		$downloaded = file_get_contents($url);
+		$url = $this->urlBase->withPath('daily-menu')->withQuery(['restaurant_id'=>$restaurantId]);
+		$downloaded = $this->get($url);
 		return \Nette\Utils\Json::decode($downloaded);
 	}
 }
