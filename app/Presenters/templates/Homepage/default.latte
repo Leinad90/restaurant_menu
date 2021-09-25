@@ -2,15 +2,14 @@
 
 {block content}
 <div id="banner">
-	<h1 n:block=title>Seznam restaurací!</h1>
+	<h1 n:block=title>Seznam restaurací</h1>
 </div>
 
 <div id="content">
 	{foreach $restaurants as $restaurant}
-		<div>
-			<h2>{$restaurant->name}</h2>
-			<address>{$restaurant->address}</address><a href="geo:{$restaurant->gps->lat},{$restaurant->gps->lng}">Navigovat</a>
-			<a href="{plink detail $restaurant->id}">Detail</a>
+		<div class="restaurant">
+		<h2>{$restaurant->name}</h2>
+		{include '@restaurant.latte', restaurant: $restaurant}
 		</div>
 	{/foreach}
 </div>

@@ -15,15 +15,16 @@ class Downloader {
 
 	use \Nette\SmartObject;
 
-	protected \Nette\Caching\Cache $cache;
+	protected \Nette\Caching\Cache $plainCache;
 
 	public function __construct(\Nette\Caching\Storage $storage) {
-		$this->cache = new \Nette\Caching\Cache($storage, 'downloader');
+		$this->plainCache = new \Nette\Caching\Cache($storage, 'downloader');
 	}
 
 	protected function get(string|\Stringable $url) {
-		$return = $this->cache->load($url);
+		$return = $this->plainCache->load($url);
 		if ($return === null) {
+			sleep(1);
 			$curl = curl_init((string) $url);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_HEADERFUNCTION,
@@ -41,9 +42,8 @@ class Downloader {
 			if($return === false) {
 				throw new DownloaderException("Failed to get $url",curl_errno($curl));
 			}
-			$info = curl_getinfo($curl);
-			$dependencies = [$this->cache::EXPIRATION=> $headers['access-control-max-age'][0]];
-			$this->cache->save($url, $return, $dependencies);
+			$dependencies = [$this->plainCache::EXPIRATION=> $headers['access-control-max-age'][0]];
+			$this->plainCache->save($url, $return, $dependencies);
 		}
 		return $return;
 	}

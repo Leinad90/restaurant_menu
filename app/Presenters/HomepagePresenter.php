@@ -21,6 +21,7 @@ class HomepagePresenter extends Nette\Application\UI\Presenter
 	
 	public function renderDetail(int $restaurantId)
 	{
-		$this->template->menu = $this->restaurantApi->getDetail($restaurantId);
+		$this->template->restaurant = $this->restaurantApi->getDetail($restaurantId);
+		$this->template->menu = $this->restaurantApi->getMenu($restaurantId);
 	}
 }

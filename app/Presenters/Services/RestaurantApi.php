@@ -15,19 +15,25 @@ use Nette\Schema\Processor;
  *
  * @author Daniel Hejduk <daniel.hejduk at gmail.com>
  */
-class RestaurantApi extends Downloader {
+class RestaurantApi extends Downloader
+{
 
 	private UrlImmutable $urlBase;
+	
+	protected \Nette\Caching\Cache $dataCache;
 
-	public function __construct(string $urlBase, \Nette\Caching\Storage $storage) {
+	public function __construct(string $urlBase, \Nette\Caching\Storage $storage)
+	{
 		parent::__construct($storage);
+		$this->dataCache = new \Nette\Caching\Cache($storage, 'data');
 		$this->urlBase = new UrlImmutable($urlBase);
 	}
 
-	public function getList() {
+	public function getList()
+	{
 		$url = $this->urlBase->withPath("restaurant");
-		$downloaded = $this->get($url);
 		try {
+			$downloaded = $this->get($url);
 			$data = Json::decode($downloaded);
 		} catch (Utils\JsonException $e) {
 			throw new RestaurantApiException(message: "Failed to decode data", previous: $e);
@@ -45,10 +51,15 @@ class RestaurantApi extends Downloader {
 						])
 		);
 		$normalized = $this->validate($schema, $data);
-		return $normalized;
+		$return = array();
+		foreach ($normalized as $restaurant) {
+			$return[$restaurant->id] = $restaurant;
+			$this->dataCache->save($restaurant->id, $restaurant);
+		}
+		return $return;
 	}
 
-	public function getDetail(int $restaurantId)
+	public function getMenu(int $restaurantId)
 	{
 		$url = $this->urlBase->withPath('daily-menu')->withQuery(['restaurant_id' => $restaurantId]);
 		$downloaded = $this->get($url);
@@ -66,7 +77,7 @@ class RestaurantApi extends Downloader {
 										'meals' => Expect::arrayOf(
 											Expect::structure([
 												'name' => Expect::string(),
-												'price' => Expect::type('int|float'),
+												'price' => Expect::type('int|float|string'),
 											])
 										),
 									]),
@@ -77,8 +88,18 @@ class RestaurantApi extends Downloader {
 		$normalized = $this->validate($schema, $data);
 		return $normalized;
 	}
+	
+	public function getDetail(int $restaurantId)
+	{
+		return $this->dataCache->load($restaurantId,
+				function() use ($restaurantId) {
+					return $this->getList()[$restaurantId];
+				}
+		);
+	}
 
-	protected function validate($schema, $data) {
+	protected function validate($schema, $data)
+	{
 		try {
 			$processor = new Processor();
 			return $processor->process($schema, $data);
@@ -89,6 +110,6 @@ class RestaurantApi extends Downloader {
 
 }
 
-class RestaurantApiException extends \Exception {
-	
+class RestaurantApiException extends DownloaderException
+{
 }

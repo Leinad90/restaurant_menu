@@ -2,11 +2,14 @@
 
 {block content}
 <div id="banner">
-	<h1 n:block=title>Jídelníček</h1>
+	<h1 n:block=title>Jídelníček {$restaurant->name}</h1>
 </div>
 
 <div id="content">
 	<a href="{plink default}">Zpátky na seznam restaurací</a>
+	<div class="restaurant">
+		{include '@restaurant.latte'}
+	</div>
 	{foreach $menu as $day}
 		<div class="day">
 		<h2>{$day->date|date:'d.m.Y'}</h2>
@@ -37,9 +40,9 @@
 				</tbody>
 			</table>
 		{/foreach}
-		{if $day->note}
+		<div class="note">
 			{$day->note}
-		{/if}
+		</div>
 		</div>
 	{/foreach}
 </div>
