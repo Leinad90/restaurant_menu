@@ -15,7 +15,7 @@ class Downloader {
 
 	use \Nette\SmartObject;
 
-	private \Nette\Caching\Cache $cache;
+	protected \Nette\Caching\Cache $cache;
 
 	public function __construct(\Nette\Caching\Storage $storage) {
 		$this->cache = new \Nette\Caching\Cache($storage, 'downloader');
