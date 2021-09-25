@@ -9,8 +9,8 @@
 	{foreach $restaurants as $restaurant}
 		<div>
 			<h2>{$restaurant->name}</h2>
-			<address>{$restaurant->address}</address><a href="geo:{$restaurant->gps->}">Navigovat</a>
-			<a href="{$restaurant->url}">{$restaurant->url|truncate:20}</a>
+			<address>{$restaurant->address}</address><a href="geo:{$restaurant->gps->lat},{$restaurant->gps->lng}">Navigovat</a>
+			<a href="{plink detail $restaurant->id}">Detail</a>
 		</div>
 	{/foreach}
 </div>

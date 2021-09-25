@@ -12,10 +12,26 @@ use Nette;
 
 
 class RestaurantApi {
-    use Nette\SmartObject; 
-    public function getList()
+    use Nette\SmartObject;
+	
+	private string $urlBase;
+
+
+	public function __construct()
 	{
-		$url = "https://private-anon-d14d2ce8c7-idcrestaurant.apiary-mock.com/restaurant";
+		$this->urlBase = "https://private-anon-d14d2ce8c7-idcrestaurant.apiary-mock.com/";
+	}
+
+
+	public function getList()
+	{
+		$url = $this->urlBase."restaurant";
+		$downloaded = file_get_contents($url);
+		return \Nette\Utils\Json::decode($downloaded);
+	}
+	
+	public function getDetail(int $restaurantId) {
+		$url = $this->urlBase."daily-menu?restaurant_id=".$restaurantId;
 		$downloaded = file_get_contents($url);
 		return \Nette\Utils\Json::decode($downloaded);
 	}

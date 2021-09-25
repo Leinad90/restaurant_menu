@@ -1,0 +1,46 @@
+{* This is the welcome page, you can delete it *}
+
+{block content}
+<div id="banner">
+	<h1 n:block=title>Jídelníček</h1>
+</div>
+
+<div id="content">
+	<a href="{plink default}">Zpátky na seznam restaurací</a>
+	{foreach $menu as $day}
+		<div class="day">
+		<h2>{$day->date|date:'d.m.Y'}</h2>
+		{foreach $day->courses as $course}
+			<h3>{$course->course}</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>
+							Jídlo
+						</th>
+						<th>
+							Cena
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				{foreach $course->meals as $meal}
+					<tr>
+						<td>
+							{$meal->name}
+						</td>
+						<td>
+							{$meal->price|number:2, ',',' '}
+						</td>
+					</tr>
+				{/foreach}
+				</tbody>
+			</table>
+		{/foreach}
+		{if $day->note}
+			{$day->note}
+		{/if}
+		</div>
+	{/foreach}
+</div>
+
