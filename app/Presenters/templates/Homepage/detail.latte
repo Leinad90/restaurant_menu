@@ -2,7 +2,7 @@
 
 {block content}
 <div id="banner">
-	<h1 n:block=title>Jídelníček {$restaurant->name}</h1>
+	<h1 n:block=title>Jídelníček - {$restaurant->name}</h1>
 </div>
 
 <div id="content">
@@ -14,12 +14,11 @@
 		<div class="day">
 		<h2>{$day->date|date:'d.m.Y'}</h2>
 		{foreach $day->courses as $course}
-			<h3>{$course->course}</h3>
 			<table>
 				<thead>
 					<tr>
 						<th>
-							Jídlo
+							{$course->course}
 						</th>
 						<th>
 							Cena
@@ -29,7 +28,7 @@
 				<tbody>
 				{foreach $course->meals as $meal}
 					<tr>
-						<td>
+						<td class="meal">
 							{$meal->name}
 						</td>
 						<td>

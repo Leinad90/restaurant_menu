@@ -1,4 +1,3 @@
-{dump}			
-<address>{$restaurant->address}</address>
-			<a href="geo:{$restaurant->gps->lat},{$restaurant->gps->lng}">Bod</a>
-			<a href="{plink detail $restaurant->id}">Detail</a>
+<address>{$restaurant->address|breaklines}</address>
+<a href="geo:{$restaurant->gps->lat},{$restaurant->gps->lng}">Bod</a>
+<a class="detail" href="{plink detail $restaurant->id}">Detail</a>

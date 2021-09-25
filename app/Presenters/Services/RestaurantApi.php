@@ -76,8 +76,8 @@ class RestaurantApi extends Downloader
 										'course' => Expect::string(),
 										'meals' => Expect::arrayOf(
 											Expect::structure([
-												'name' => Expect::string(),
-												'price' => Expect::type('int|float|string'),
+												'name' => Expect::string()->required(),
+												'price' => Expect::type('int|float|string')->required(),
 											])
 										),
 									]),

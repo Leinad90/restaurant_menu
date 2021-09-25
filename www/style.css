@@ -1,0 +1,58 @@
+/* 
+    Created on : 25. 9. 2021, 21:36:38
+    Author     : Daniel Hejduk <daniel.hejduk at gmail.com>
+*/
+
+h1 {
+	font-size: 1.5em;
+}
+
+h1, h2, h3 {
+	margin-bottom: 0px;
+}
+
+.restaurant {
+	margin-bottom: 1em;
+}
+
+.restaurant address {
+	display: inline;
+}
+
+.restaurant .detail {
+	display: block;
+}
+
+.restaurant h2 {
+	font-style: normal;
+	font-size: 1em;
+}
+
+.day h2 {
+	font-style: normal;
+	font-size: 1.2em;
+}
+
+.day h3 {
+	font-style: normal;
+	font-size: 1em;
+}
+
+.day table {
+	border-width: 1px;
+	border-style: solid;
+	border-collapse: collapse;
+}
+
+.day table td, .day table tr {
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+.day .meal {
+	width: 500px;
+}
+
+#content {
+	padding: 10px;
+}
