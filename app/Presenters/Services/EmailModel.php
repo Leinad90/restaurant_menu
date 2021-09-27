@@ -30,6 +30,12 @@ class EmailModel Extends Database {
 			$this->connection->query($sql, $email, $restaurant);
 		}
 	}
+	
+	public function getMailsToSend() : array
+	{
+		$sql = 'SELECT * FROM e_mails WHERE e_mail IS NOT NULL AND last_send_on < CURRENT_DATE ORDER BY last_send_on ASC';
+		return $this->connection->fetchAll($sql);
+	}
 
 }
 

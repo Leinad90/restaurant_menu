@@ -1,0 +1,4 @@
+{foreach $restaurants as $id => $restaurant}
+	{include '../Homepage/detail.php',  restaurant: $restaurant, menu: $menus[$i] }
+{/foreach}
+<a href="{link Homepage:delete $mailId}">Odhlásit</a>

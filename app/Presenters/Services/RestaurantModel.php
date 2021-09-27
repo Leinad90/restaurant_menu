@@ -17,5 +17,11 @@ class RestaurantModel Extends Database {
 		$this->connection->query($sql, $apiId, $name);
 		return (int)$this->connection->getInsertId();
 	}
+	
+	public function getRestaurantsForMail(int $mailId) : array
+	{
+		$sql = 'SELECT * FROM email_restaurants WHERE e_mail = ?';
+		return $this->connection->fetchAll($sql,$mailId);
+	}
 
 }
