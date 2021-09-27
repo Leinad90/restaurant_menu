@@ -20,3 +20,5 @@ di:
 services:
 	- App\Router\RouterFactory::createRouter
 	- App\Services\RestaurantApi(%restaurant.url%)
+	- App\Services\EmailModel()
+	- App\Services\RestaurantModel()
