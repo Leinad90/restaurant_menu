@@ -20,13 +20,23 @@ class HomepagePresenter extends Nette\Application\UI\Presenter
 	
 	public function renderDefault()
 	{
-		$this->template->restaurants = $this->restaurantApi->getList();
+		try {
+			$this->template->restaurants = $this->restaurantApi->getList();
+		} catch (\App\Services\RestaurantApiException $e) {
+			$this->flashMessage($e->getMessage());
+			$this->error($e->getMessage(), Nette\Http\IResponse::S503_SERVICE_UNAVAILABLE);
+		}
 	}
 	
 	public function renderDetail(int $restaurantId)
 	{
-		$this->template->restaurant = $this->restaurantApi->getDetail($restaurantId);
-		$this->template->menu = $this->restaurantApi->getMenu($restaurantId);
+		try {
+			$this->template->restaurant = $this->restaurantApi->getDetail($restaurantId);
+			$this->template->menu = $this->restaurantApi->getMenu($restaurantId);
+		} catch (\App\Services\RestaurantApiException $e) {
+			$this->flashMessage($e->getMessage());
+			$this->error($e->getMessage(), Nette\Http\IResponse::S503_SERVICE_UNAVAILABLE);
+		}
 	}
 	
 	public function renderRegister()
@@ -37,6 +47,8 @@ class HomepagePresenter extends Nette\Application\UI\Presenter
 	public function renderUnsubscribe(int $mailId)
 	{
 		$this->emailModel->unsubcribe($mailId);
+		$this->flashMessage('Emailing odhlášen');
+		$this->redirect('default');
 	}
 
 

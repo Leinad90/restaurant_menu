@@ -24,7 +24,6 @@ class Downloader {
 	protected function get(string|\Stringable $url) {
 		$return = $this->plainCache->load($url);
 		if ($return === null) {
-			sleep(1);
 			$curl = curl_init((string) $url);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_HEADERFUNCTION,
