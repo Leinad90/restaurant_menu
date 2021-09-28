@@ -6,20 +6,18 @@ namespace App\Presenters;
 
 use Nette;
 
+class CliPresenter extends Nette\Application\UI\Presenter {
 
-class CliPresenter extends Nette\Application\UI\Presenter
-{
-    public function __construct(
+	public function __construct(
 			private \App\Services\RestaurantModel $RestaurantModel,
 			private \App\Services\RestaurantApi $RestaurantApi,
 			private \App\Services\EmailModel $EmailModel,
 			private \Nette\Mail\Mailer $Mailer
 	) {
 		parent::__construct();
-    }
-	
-	public function renderDefault()
-	{
+	}
+
+	public function renderDefault() {
 		$emails = $this->EmailModel->getMailsToSend();
 		foreach ($emails as $email) {
 			$restaurants = $this->RestaurantModel->getRestaurantsForMail($email->id);
@@ -28,19 +26,28 @@ class CliPresenter extends Nette\Application\UI\Presenter
 				$details[] = $this->RestaurantApi->getDetail($restaurant->restaurant);
 				$menus[] = $this->RestaurantApi->getMenu($restaurant->restaurant);
 			}
-			$Latte = new \Latte\Engine();
-			$Message = new Nette\Mail\Message();
-			$params = ['restaurants' => $details, 'menus'=>$menus, 'mail'=> $email->id];
-			$Message->
-					addTo($email->e_mail)->
-					setHtmlBody($Latte->renderToString(__DIR__.'/templates/Cli/mail.latte',$params))->
-					setSubject('Jídelníčky');
+			$Message = $this->buildMessage($details, $menus, $email);
 			$this->Mailer->send($Message);
-			dumpe($Message);
+			$this->EmailModel->setSentNow($email->id);
 		}
-		
 		$this->terminate();
 	}
-	
-	
+
+	private function buildMessage(array $details, array $menus, \Nette\Database\Row $email): \Nette\Mail\Message {
+		$Latte = new \Latte\Engine();
+		$Message = new \Nette\Mail\Message();
+		$params = [
+			'restaurants' => $details,
+			'menus' => $menus,
+			'mailId' => $email->id,
+			'unsubscribe' => DOMAIN . '/Homepage/unsubscribe?emailId=' . $email->id];
+		$Message->
+				addTo($email->e_mail)->
+				setHtmlBody($Latte->renderToString(__DIR__ . '/templates/Cli/mail.latte', $params))->
+				setSubject('Jídelníčky');
+		var_dump($Message);
+		return $Message;
+	}
+
+
 }

@@ -1,4 +1,45 @@
-{foreach $restaurants as $id => $restaurant}
-	{include '../Homepage/detail.php',  restaurant: $restaurant, menu: $menus[$i] }
+{block |spaceless}
+{foreach $restaurants as $i => $restaurant}
+	<div>
+		<h1 n:block=title>Jídelníček - {$restaurant->name}</h1>
+		<address>{$restaurant->address|breaklines}</address>
+		<a href="geo:{$restaurant->gps->lat},{$restaurant->gps->lng}">Bod</a>
+		{foreach $menus[$i] as $day}
+		<div class="day">
+		<h2>{$day->date|date:'d.m.Y'}</h2>
+		{foreach $day->courses as $course}
+			<table>
+				<thead>
+					<tr>
+						<th>
+							{$course->course}
+						</th>
+						<th>
+							Cena
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				{foreach $course->meals as $meal}
+					<tr>
+						<td class="meal">
+							{$meal->name}
+						</td>
+						<td>
+							{$meal->price|number:2, ',',' '}
+						</td>
+					</tr>
+				{/foreach}
+				</tbody>
+			</table>
+		{/foreach}
+		<div class="note">
+			{$day->note}
+		</div>
+		</div>
+	{/foreach}
+	</div>
+	
 {/foreach}
-<a href="{link Homepage:delete $mailId}">Odhlásit</a>
+<a href="{$unsubscribe}">Odhlásit</a> - {$unsubscribe}
+{/block}

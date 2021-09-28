@@ -22,6 +22,13 @@ class EmailModel Extends Database {
 		}
 	}
 	
+	public function unsubscribe(int $emailId)
+	{
+		$sql = 'UPDATE e_mails SET e_mail = NULL WHERE id = ?';
+		$this->connection->query($sql,$emailId);
+	}
+
+
 	public function insertRestaurants(int $email, array $restaurants)
 	{
 		$sql= 'INSERT INTO email_restaurants (e_mail, restaurant) VALUES (?, ?)';
@@ -35,6 +42,12 @@ class EmailModel Extends Database {
 	{
 		$sql = 'SELECT * FROM e_mails WHERE e_mail IS NOT NULL AND last_send_on < CURRENT_DATE ORDER BY last_send_on ASC';
 		return $this->connection->fetchAll($sql);
+	}
+	
+	public function setSentNow(int $emaiId)
+	{
+		$sql = 'UPDATE e_mails SET last_send_on = now() WHERE id = ?';
+		$this->connection->query($sql,$emaiId);
 	}
 
 }

@@ -2,7 +2,10 @@ parameters:
 	restaurant:
 		url: 'https://private-anon-d14d2ce8c7-idcrestaurant.apiary-mock.com/'
 
+constants:
+	DOMAIN: 'localhost/restaurant_menu/'
+
 database:
 	dsn: 'mysql:dbname=test;host:localhost'
-	user: 1
-	password: 1
+	user: user
+	password: password

@@ -33,6 +33,11 @@ class HomepagePresenter extends Nette\Application\UI\Presenter
 	{
 		$this->updateRestaurantList();
 	}
+	
+	public function renderUnsubscribe(int $mailId)
+	{
+		$this->emailModel->unsubcribe($mailId);
+	}
 
 
 	public function createComponentForm(): Form
