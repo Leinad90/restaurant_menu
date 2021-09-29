@@ -8,24 +8,28 @@ namespace App\Services;
  *
  * @author Daniel Hejduk <daniel.hejduk at gmail.com>
  */
-class Database {
-	use \Nette\SmartObject; 
-	
-	public function __construct(
-			protected \Nette\Database\Connection $connection
-	) {
-		
-	}
+class Database
+{
+    use \Nette\SmartObject; 
+    
+    public function __construct(
+        protected \Nette\Database\Connection $connection
+    ) {
+        
+    }
 
-	public function begin() {
-		$this->connection->beginTransaction();
-	}
-	
-	public function rollback() {
-		$this->connection->rollBack();
-	}
-	
-	public function commit() {
-		$this->connection->commit();
-	}
+    public function begin()
+    {
+        $this->connection->beginTransaction();
+    }
+    
+    public function rollback()
+    {
+        $this->connection->rollBack();
+    }
+    
+    public function commit()
+    {
+        $this->connection->commit();
+    }
 }
