@@ -20,7 +20,8 @@ class RestaurantApi extends Downloader {
 	private UrlImmutable $urlBase;
 	protected \Nette\Caching\Cache $dataCache;
 
-	public function __construct(string $urlBase, \Nette\Caching\Storage $storage) {
+	public function __construct(string $urlBase, \Nette\Caching\Storage $storage)
+	{
 		parent::__construct($storage);
 		$this->dataCache = new \Nette\Caching\Cache($storage, 'data');
 		$this->urlBase = new UrlImmutable($urlBase);
@@ -39,7 +40,7 @@ class RestaurantApi extends Downloader {
 		try {
 			$downloaded = $this->get($url);
 			$data = Json::decode($downloaded);
-		} catch (Utils\JsonException $e) {
+		} catch (JsonException $e) {
 			throw new RestaurantApiException(message: "Failed to decode data", previous: $e);
 		}
 		$schema = Expect::arrayOf(
@@ -77,7 +78,7 @@ class RestaurantApi extends Downloader {
 		$downloaded = $this->get($url);
 		try {
 			$data = Json::decode($downloaded);
-		} catch (Utils\JsonException $e) {
+		} catch (JsonException $e) {
 			throw new RestaurantApiException(message: "Failed to decode data", previous: $e);
 		}
 		$schema = Expect::arrayOf(
@@ -120,6 +121,7 @@ class RestaurantApi extends Downloader {
 
 }
 
-class RestaurantApiException extends DownloaderException {
+class RestaurantApiException extends DownloaderException
+{
 	
 }

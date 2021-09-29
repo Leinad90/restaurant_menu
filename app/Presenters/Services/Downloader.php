@@ -21,7 +21,9 @@ class Downloader {
 		$this->plainCache = new \Nette\Caching\Cache($storage, 'downloader');
 	}
 
-	protected function get(string|\Stringable $url) {
+	protected function get(string|\Stringable $url)
+	{
+		$url=(string)$url;
 		$return = $this->plainCache->load($url);
 		if ($return === null) {
 			$curl = curl_init((string) $url);
@@ -41,7 +43,9 @@ class Downloader {
 			if($return === false) {
 				throw new DownloaderException("Failed to get $url",curl_errno($curl));
 			}
-			$dependencies = [$this->plainCache::EXPIRATION=> $headers['access-control-max-age'][0]];
+			$dependencies = [
+				$this->plainCache::EXPIRATION=> $headers['access-control-max-age'][0]??10
+			];
 			$this->plainCache->save($url, $return, $dependencies);
 		}
 		return $return;
@@ -49,6 +53,7 @@ class Downloader {
 
 }
 
-class DownloaderException extends \Exception {
+class DownloaderException extends \Exception
+{
 	
 }
