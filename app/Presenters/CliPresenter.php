@@ -2,11 +2,12 @@
 /**
  * Comand line presenter, for runing cron and so on
  * php version 8.0.11
+ *
  * @category Index
- * @package Restaurant Menu
- * @author Daniel Hejduk <daniel.hejduk at gmail.com>
- * @licence None
- * @link https://github.com/Leinad90/restaurant_menu
+ * @package  Restaurant Menu
+ * @author   Daniel Hejduk <daniel.hejduk at gmail.com>
+ * @licence  None
+ * @link     https://github.com/Leinad90/restaurant_menu
  */
 
 declare(strict_types=1);
@@ -18,13 +19,13 @@ use Nette;
 class CliPresenter extends Nette\Application\UI\Presenter
 {
 
-	/**
-	 * @inheritdoc
-	 * @param \App\Services\RestaurantModel $RestaurantModel
-	 * @param \App\Services\RestaurantApi $RestaurantApi
-	 * @param \App\Services\EmailModel $EmailModel
-	 * @param \Nette\Mail\Mailer $Mailer
-	 */
+    /**
+     * @inheritdoc
+     * @param      \App\Services\RestaurantModel $RestaurantModel
+     * @param      \App\Services\RestaurantApi   $RestaurantApi
+     * @param      \App\Services\EmailModel      $EmailModel
+     * @param      \Nette\Mail\Mailer            $Mailer
+     */
     public function __construct(
         private \App\Services\RestaurantModel $RestaurantModel,
         private \App\Services\RestaurantApi $RestaurantApi,
@@ -34,9 +35,9 @@ class CliPresenter extends Nette\Application\UI\Presenter
         parent::__construct();
     }
 
-	/**
-	 * Send mail messages to subsribed users
-	 */
+    /**
+     * Send mail messages to subsribed users
+     */
     public function renderDefault()
     {
         $emails = $this->EmailModel->getMailsToSend();
@@ -54,18 +55,19 @@ class CliPresenter extends Nette\Application\UI\Presenter
         $this->terminate();
     }
 
-	/**
-	 * Prepare mail message to send
-	 * @param array $details Details of selected resataurant
-	 * @param array $menus Daily menus of selected restaurants
-	 * @param \Nette\Database\Row $email Information abour registered user
-	 * @return \Nette\Mail\Message Prepared message
-	 */
+    /**
+     * Prepare mail message to send
+     *
+     * @param  array               $details Details of selected resataurant
+     * @param  array               $menus   Daily menus of selected restaurants
+     * @param  \Nette\Database\Row $email   Information abour registered user
+     * @return \Nette\Mail\Message Prepared message
+     */
     private function buildMessage(
-			array $details,
-			array $menus,
-			\Nette\Database\Row $email
-	): \Nette\Mail\Message {
+        array $details,
+        array $menus,
+        \Nette\Database\Row $email
+    ): \Nette\Mail\Message {
         $Latte = new \Latte\Engine();
         $Message = new \Nette\Mail\Message();
         $params = [
